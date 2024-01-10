@@ -19,6 +19,8 @@
                 console.log(serverOffset)
                 // socket.auth.serverOffset = serverOffset;
             }
+            //scroll to bottom of messages
+            messages.scrollTop = messages.scrollHeight;
         })
 
         form.addEventListener('submit', (e) => {
@@ -50,10 +52,18 @@
             list-style-type: none;
             margin: 0;
             padding: 0;
+            overflow-y: scroll;
+            height: 100%;
+            scroll-behavior: smooth;
+            padding-bottom: 48px;
         }
 
         .messages > li{
             padding: .5rem 1rem;
+        }
+
+        .messages > li:nth-child(even) {
+            background: #e4e8e8;
         }
 
         .messages > li:nth-child(odd) {
@@ -73,6 +83,7 @@
             bottom: 0;
             display: flex;
             height: 48px;
+            width: 98%;
             left: 0;
             padding: 4px;
             position: absolute;
