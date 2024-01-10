@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TranslatorChat</title>
+    <script type="module">
+        import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
+        const socket = io();
+
+        const form = document.querySelector('.form');
+        const input = document.querySelector('.input');
+        const messages = document.querySelector('.messages');
+
+        socket.on('chat message', (msg, serverOffset) => {
+            const item = `<li>${msg}</li>`
+            messages.insertAdjacentHTML('beforeend', item)
+            if(serverOffset){
+                console.log(serverOffset)
+                // socket.auth.serverOffset = serverOffset;
+            }
+        })
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            if(input.value) {
+                socket.emit('chat message', input.value)
+                input.value = ''
+            }
+        })
+    </script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body{
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+            padding: 36px 36px 100px 36px ;
+        }
+
+        .messages{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .messages > li{
+            padding: .5rem 1rem;
+        }
+
+        .messages > li:nth-child(odd) {
+            background: #eee;
+        }
+
+        .chat{
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 100%;
+            width: 350px;
+            position: relative;
+        }
+
+        .form{
+            bottom: 0;
+            display: flex;
+            height: 48px;
+            left: 0;
+            padding: 4px;
+            position: absolute;
+            right: 0;
+        }
+
+        .input{
+            border-radius: 9999px;
+            border: 1px solid #eee;
+            flex: 1;
+            margin: 4px;
+            padding: 0 8px;
+        }
+
+        .input:focus{
+            outline: 0;
+        }
+
+        .form > button {
+            background: #09F;
+            color: #FFF;
+            border: 0;
+            margin: 4px;
+            border-radius: 4px;
+        }
+
+        .form > button:hover {
+            background: #0cF;
+        }
+    </style>
+</head>
+<body>
+    <section class="chat">
+        <ul class="messages"></ul>
+        <form class="form" >
+            <input type="text" name="message" class="input" placeholder="Type a message" autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </section>
+</body>
+</html>
